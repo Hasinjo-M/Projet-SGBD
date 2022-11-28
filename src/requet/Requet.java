@@ -180,10 +180,7 @@ public class Requet {
             }
             return new Table(table, nomColumnReponse, reponseData);
         } catch (Exception e) {
-            System.out.println("requet.Requet.projection() fa manin no tsy throw "+e.getMessage());
-            String rep = e.getMessage();
-            System.out.println("string "+rep);
-            throw new Exception(rep);
+            throw  e;
         }
     }
 

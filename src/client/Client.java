@@ -33,21 +33,15 @@ public class Client {
             scan = new Scanner(System.in);
             boolean testMessage = false;
             while (true) {
-                if(testMessage==false){
-                    String requet = scan.nextLine();
-                    userOutput.write(requet);
-                    userOutput.newLine();
-                    userOutput.flush();
-                    if (requet.equals("exit")) {
-                        System.out.println("Deconnecté");
-                        break;
-                    }
-                }else{
-                    System.out.println("nety niditra tato ve");
-                    userOutput.newLine();
-                    userOutput.flush();
-                    testMessage = false; 
+                String requet = scan.nextLine();
+                userOutput.write(requet);
+                userOutput.newLine();
+                userOutput.flush();
+                if (requet.equals("exit")) {
+                    System.out.println("Deconnecté");
+                    break;
                 }
+               
                 try {
                     Object objrecu = ObjectInput.readObject();
                     if(objrecu instanceof Table table){
@@ -78,12 +72,3 @@ public class Client {
         }       
     }
 }
-//Object trans = tableRep;
-                    //System.out.println(tableauAEmettre.toString());
-                    //create table test ( id:int,Nom:String,Anniversaire:Date )
-                    //ObjetOut.writeObject(tableRep);
-                    //ObjetOut.flush();
-                    //tableRep.afficheResultat();
-                    //insert into testmety ( id,Nom,Anniverssaire ) values ( 2,Toavina,23/06/04 )
-                    //select . id,Nom from testmety
-                    //selects * from testmety

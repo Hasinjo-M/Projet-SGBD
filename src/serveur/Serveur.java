@@ -57,7 +57,7 @@ public class Serveur {
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage() + " eto " + e.getCause());
+           
             e.printStackTrace();
             throw e;
         } finally {

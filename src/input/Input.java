@@ -40,9 +40,7 @@ public class Input {
                     //Table reponse = rq.projection(sql);
                     return reponse;
                 } catch (Exception e) {
-                    //e.printStackTrace();
-                    System.out.println("input.Input.output() 1 "+e.getMessage());
-                    throw new Exception("il y a une erreur ");
+                   throw e;
                 }
             }
     }
