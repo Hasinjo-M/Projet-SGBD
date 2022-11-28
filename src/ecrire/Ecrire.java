@@ -12,7 +12,7 @@ public class Ecrire {
 
     public Ecrire(String dir, String[] input) throws Exception {
 
-        File file = new File(dir);
+        File file = new File(dir+".txt");
         boolean test = false;
         if (!file.exists()) {
             file.createNewFile();

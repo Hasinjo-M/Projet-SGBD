@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Lire {
     public ArrayList<String> nomColumn(String url) throws Exception {
         ArrayList<String> nomCol = new ArrayList<>();
-        File file = new File(url);
+        File file = new File(url+".txt");
         if (!file.exists()) {
             throw new Exception("Table " + url + " n'existe pas ");
         }
@@ -27,7 +27,7 @@ public class Lire {
 
     public ArrayList<ArrayList<String>> Data(String url) throws Exception {
         ArrayList<ArrayList<String>> reponse = new ArrayList<>();
-        File file = new File(url);
+        File file = new File(url+".txt");
         if (!file.exists()) {
             throw new Exception("Table " + url + " n'existe pas ");
         }

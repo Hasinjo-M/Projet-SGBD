@@ -1,11 +1,12 @@
 package table;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Table
  */
-public class Table {
+public class Table implements Serializable {
     String nomTable;
     ArrayList<String> nomColumn;
     ArrayList<ArrayList<String>> Data;

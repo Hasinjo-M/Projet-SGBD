@@ -8,7 +8,7 @@ import table.*;
 import annotation.*;
 
 public class Requet {
-    protected String donne(String[] colTypye, int index, int debut) {
+    public String donne(String[] colTypye, int index, int debut) {
         String rep = new String();
         for (int j = 0; j < colTypye.length; j++) {
             String[] typeCol = colTypye[j].split(":");
@@ -180,8 +180,10 @@ public class Requet {
             }
             return new Table(table, nomColumnReponse, reponseData);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            System.out.println("requet.Requet.projection() fa manin no tsy throw "+e.getMessage());
+            String rep = e.getMessage();
+            System.out.println("string "+rep);
+            throw new Exception(rep);
         }
     }
 
@@ -235,7 +237,7 @@ public class Requet {
         }
     }
 
-    protected boolean testExistance(ArrayList<String> donne, ArrayList<ArrayList<String>> tabdonne) {
+    public boolean testExistance(ArrayList<String> donne, ArrayList<ArrayList<String>> tabdonne) {
         int test = 0;
         for (ArrayList<String> data : tabdonne) {
             for (String detailleData : data) {
@@ -255,7 +257,7 @@ public class Requet {
     }
 
     // test existance d'un string
-    protected boolean testExistance(String value, ArrayList<String> data, int index) {
+    public boolean testExistance(String value, ArrayList<String> data, int index) {
         for (int i = 0; i < data.size(); i++) {
             if (i == index && value.equals(data.get(i))) {
                 return true;

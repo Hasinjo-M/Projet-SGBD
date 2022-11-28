@@ -9,53 +9,60 @@ import java.net.Socket;
 import java.util.Arrays;
 
 import input.Input;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import table.Table;
 
 public class Serveur {
-    static final int port = 9999;
+    /*** port ***/
+    static final int port = 9990;
 
     public static void main(String[] args) throws Exception {
         ServerSocket server = null;
         Socket client = null;
         BufferedReader userInput = null;
         ObjectOutputStream ObjetOut = null;
+        BufferedWriter ServeurOutput = null;
+        
         Input traitement = new Input();
         Table tableRep = new Table();
         try {
-            server = new ServerSocket(9999);
+            /**** serveur ****/
+            server = new ServerSocket(port);
+            
             client = server.accept();
-            int[] tableauAEmettre = { 7, 8, 9 };
-
+          
             ObjetOut = new ObjectOutputStream(client.getOutputStream());
             ObjetOut.flush();
 
-            userInput = new BufferedReader(new InputStreamReader(client.getInputStream())); // System.in
+            userInput = new BufferedReader(new InputStreamReader(client.getInputStream())); 
+            ServeurOutput = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+            
+            boolean tesExepetion = false;
             while (true) {
                 String requet = userInput.readLine();
-                System.out.println(requet);
                 if (requet.equals("exit")) {
                     break;
                 }
                 try {
-                    tableRep = traitement.output(requet);
-                    Object trans = tableRep;
-                    ObjetOut.writeObject(tableauAEmettre);
+                    tableRep = traitement.output(requet);   
+                    ObjetOut.writeObject(tableRep);
                     ObjetOut.flush();
-                    tableRep.afficheResultat();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    // System.out.println(e.getMessage() + " etooo");
-                    break;
+                } catch (Exception k) {   
+                    String message = k.getMessage();
+                    ObjetOut.writeObject(message);
+                    ObjetOut.flush();
                 }
-
+                            
             }
 
         } catch (Exception e) {
+            System.out.println(e.getMessage() + " eto " + e.getCause());
             e.printStackTrace();
             throw e;
         } finally {
-            if (userInput != null)
-                userInput.close();
+            if(ServeurOutput!= null)
+                ServeurOutput.close();
             if (ObjetOut != null)
                 ObjetOut.close();
             if (client != null)
