@@ -23,7 +23,15 @@ public class Input {
     public Table output(String sql) throws Exception {
         String[] requet = sql.split(" ");
         Requet rq = new Requet();
-        String refAnnotation = requet[0] + " " + requet[1];
+        String refAnnotation = new String();
+        if(requet[0].equals("supprime"))
+            if(requet[1].equals("all"))
+                refAnnotation = requet[0] + " " + requet[1];
+            else
+                refAnnotation = requet[0];
+        else
+            refAnnotation = requet[0] + " " + requet[1];
+        System.out.println("input.Input.output() "+refAnnotation);
             Method methodUtiliser = getMethod(refAnnotation);
             if (String.valueOf(methodUtiliser.getReturnType()).equals("void")
                     && methodUtiliser.getName().equals("createtable")) {
@@ -33,7 +41,15 @@ public class Input {
                     && methodUtiliser.getName().equals("insert")) {
                 methodUtiliser.invoke(rq, sql);
                 throw new Exception("  insertion dans la table " + requet[2] + " terminer");
-            } else { 
+            }else if (String.valueOf(methodUtiliser.getReturnType()).equals("void")
+                    && methodUtiliser.getName().equals("deleteTab")) {
+                try {
+                    methodUtiliser.invoke(rq, sql);
+                } catch (Exception e) {
+                    throw  e;
+                }
+                
+            }else { 
                 try {
                     System.out.println("method utiliser  "+methodUtiliser.getName());
                     Table reponse = (Table) methodUtiliser.invoke(rq, sql);
@@ -43,5 +59,7 @@ public class Input {
                    throw e;
                 }
             }
+        return null;
     }
+    
 }

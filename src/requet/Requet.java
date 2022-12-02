@@ -23,7 +23,41 @@ public class Requet {
         }
         return rep;
     }
-
+    
+    /******************* fonction sur show tables ***************/
+    @NomFunction(nomFunction = "les tables")
+    public Table showtable(String sql)throws Exception{
+        Table reponse = new Table();
+        reponse.setNomTable("Les tables");
+        ArrayList<String> nomcol = new ArrayList<>();
+        nomcol.add("Nom de table");
+        reponse.setNomColumn(nomcol);
+        reponse.setData(new Lire().nomtables());
+       return reponse;
+    }
+    /********************** fonction supprime un table *******/
+    @NomFunction(nomFunction = "supprime")
+    public void deleteTab(String sql) throws Exception{
+        try {
+            String[] sp = sql.split(" ");
+            Ecrire ecrire = new Ecrire();
+            ecrire.deleteFichier(sp[1]);
+        } catch (Exception e) {
+            System.out.println("requet.Requet.deleteTab() "+e.getMessage());
+            throw  e;
+        }
+    }
+    /********************** fonction qui supprime touts le table *****/
+    @NomFunction(nomFunction = "supprime all")
+    public void deleteAll()throws Exception{
+        try {
+            Ecrire ecrire = new Ecrire();
+            ecrire.deleteAll();
+        } catch (Exception e) {
+        }
+    }
+    
+    /**********  creation table *******************************/
     @NomFunction(nomFunction = "create table")
     public void createtable(String sql) throws Exception {
         String[] requet = sql.split(" ");
@@ -38,6 +72,7 @@ public class Requet {
             throw new Exception("Probleme sur la creation d'une table");
         }
     }
+    
 
     @NomFunction(nomFunction = "insert into")
     public void insert(String sql) {

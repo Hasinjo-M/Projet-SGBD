@@ -72,3 +72,6 @@ public class Client {
         }       
     }
 }
+
+
+//create table test ( id:int,Nom:String,Anniversaire:Date )
