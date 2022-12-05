@@ -54,6 +54,7 @@ public class Requet {
             Ecrire ecrire = new Ecrire();
             ecrire.deleteAll();
         } catch (Exception e) {
+            throw e;
         }
     }
     
@@ -68,7 +69,7 @@ public class Requet {
         try {
             Ecrire ecrire = new Ecrire(requet[2], add);
         } catch (Exception e) {
-            e.printStackTrace();
+           
             throw new Exception("Probleme sur la creation d'une table");
         }
     }
@@ -132,7 +133,7 @@ public class Requet {
             }
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+          
             throw e;
         }
 

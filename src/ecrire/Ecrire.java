@@ -60,10 +60,12 @@ public class Ecrire {
             File dir = new File("Base\\");
             File[] liste = dir.listFiles();
             for (File item : liste) {
+                System.out.println("les fichier "+ item.isFile() + "  " +item.getName().endsWith(".txt"));
                 if (item.isFile() && item.getName().endsWith(".txt")) {
                    item.delete();
                 } 
             }
+            
         } catch (Exception e) {
             throw  new Exception("il y a une erreur sur deleteAll");
         }
