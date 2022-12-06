@@ -1,5 +1,7 @@
 package lire;
 
+import exceptions.MessageConfirmation;
+import exceptions.MessageErreur;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -27,18 +29,18 @@ public class Lire {
 
     }
     /**************** tout les donnes *******************/
-    public ArrayList<ArrayList<String>> Data(String url) throws Exception {
+    public ArrayList<ArrayList<String>> Data(String url) throws Exception,MessageConfirmation {
         ArrayList<ArrayList<String>> reponse = new ArrayList<>();
         File file = new File("Base\\"+url+".txt");
         if (!file.exists()) {
-            throw new Exception("Table " + url + " n'existe pas ");
+            throw new MessageConfirmation("Table " + url + " n'existe pas ");
         }
         FileReader read = new FileReader(file);
         BufferedReader buffer = new BufferedReader(read);
         String output = buffer.readLine();
         int test = 0;
         if (output == null)
-            throw new Exception("Table " + url + " est vide");
+            throw new MessageConfirmation("Table " + url + " est vide");
         while (output != null) {
             if (test == 0 || test == 1) {
                 test++;
@@ -56,7 +58,7 @@ public class Lire {
         return reponse;
     }
     
-    public ArrayList<ArrayList<String>>nomtables() throws Exception{
+    public ArrayList<ArrayList<String>>nomtables() throws Exception,MessageErreur{
          try {
             ArrayList<ArrayList<String>> Reponse = new ArrayList<>();
             File dir = new File("Base\\");
@@ -71,7 +73,7 @@ public class Lire {
             } 
             return Reponse;
         } catch (Exception e) {
-            throw  new Exception("erreur sur la fonction nomtables");
+            throw  new MessageErreur("erreur sur la fonction nomtables");
         }
     }
     

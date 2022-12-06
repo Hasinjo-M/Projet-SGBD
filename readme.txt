@@ -9,9 +9,11 @@ Requete pour supprimer tout les tables existants
 	 
 Requet create table : 
 	create table Personne ( id:int,Nom:String,Anniversaire:Date )
+	create table Vente ( id:int,NomProduit,idPersonne:int )
 
 Requete insertion dans un table : 
 	insert into Personne ( id,Nom,Anniverssaire ) values ( 2,Toavina,23/06/04 )
+		
 
 Requete Projection d'un table : (pas de condition)
 	select . id,Nom from Personne

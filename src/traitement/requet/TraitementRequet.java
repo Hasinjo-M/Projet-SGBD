@@ -1,6 +1,8 @@
 
 package traitement.requet;
 
+import exceptions.MessageConfirmation;
+import exceptions.MessageErreur;
 import input.Input;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,10 +11,16 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import table.Table;
 
 public class TraitementRequet extends Thread{
-
+    
+    private void transfereMesage(ObjectOutputStream ObjetOut, String message ) throws IOException{
+       ObjetOut.writeObject(message);
+       ObjetOut.flush();
+    }
     @Override
     public void run() {
         try {
@@ -20,7 +28,6 @@ public class TraitementRequet extends Thread{
             ObjectOutputStream ObjetOut = null;
             BufferedWriter ServeurOutput = null;   
             Input traitement = new Input();
-            Table tableRep = new Table();
             try {
                 ObjetOut = new ObjectOutputStream(client.getOutputStream());
                 ObjetOut.flush();
@@ -30,13 +37,19 @@ public class TraitementRequet extends Thread{
                 while (true) {
                     String requet = userInput.readLine();
                     try {
-                        tableRep = traitement.output(requet);   
+                    /// transfere de l'objet par ObjectOutputStream vers Client
+                        Table  tableRep = traitement.output(requet);   
                         ObjetOut.writeObject(tableRep);
                         ObjetOut.flush();
-                    } catch (Exception k) {   
-                        String message = k.getMessage();
-                        ObjetOut.writeObject(message);
-                        ObjetOut.flush();
+                    } catch (MessageConfirmation mc){
+                    ///  transfere du message de confirmation 
+                        transfereMesage(ObjetOut, mc.getMessage());
+                    }catch (MessageErreur me){
+                    ///  transfere du message de confirmation 
+                        transfereMesage(ObjetOut, me.getMessage());
+                    }
+                    catch (Exception k) {   
+                        transfereMesage(ObjetOut, k.getMessage());
                     }          
                 }
                
@@ -51,7 +64,7 @@ public class TraitementRequet extends Thread{
                     client.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         
     }

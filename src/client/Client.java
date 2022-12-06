@@ -12,8 +12,8 @@ import table.Table;
 
 public class Client {
     /*** ServerName et port ***/
-    static final String serverName = "localhost";
-    static final int serverPort = 9990;
+    static String serverName = "localhost";
+    static int serverPort = 9091;
 
     public static void main(String[] args) throws Exception {
         Socket socClient = null;
@@ -22,17 +22,28 @@ public class Client {
         BufferedWriter userOutput = null;
         Scanner scan = null;
         try {
+            scan = new Scanner(System.in);
+            
+        /// Ip du serveur 
+            System.out.println("Ip du Serveur : ");
+            serverName = scan.nextLine();
+        /// Port 
+            System.out.println("Port du Serveur : ");
+            serverPort = Integer.parseInt(scan.nextLine()) ;
+        /// Socket Client (Socket)    
             socClient = new Socket(serverName, serverPort);
-            System.out.println("Socket client: " + socClient);
+            //System.out.println(socClient);
+            System.out.println("Vous ^etes connecté sur le serveur :"+ socClient.getLocalAddress() + " Port : "+ socClient.getPort());
 
             out = new OutputStreamWriter(socClient.getOutputStream());
 
             ObjectInput = new ObjectInputStream(socClient.getInputStream());
 
             userOutput = new BufferedWriter(out);
-            scan = new Scanner(System.in);
+           
             boolean testMessage = false;
             while (true) {
+                System.out.print("Sql>");
                 String requet = scan.nextLine();
                 userOutput.write(requet);
                 userOutput.newLine();
@@ -56,8 +67,6 @@ public class Client {
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getCause());
         } finally {
 
             if (userOutput != null)
@@ -72,6 +81,3 @@ public class Client {
         }       
     }
 }
-
-
-//create table test ( id:int,Nom:String,Anniversaire:Date )

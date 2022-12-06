@@ -4,10 +4,20 @@ import java.util.ArrayList;
 import lire.*;
 import ecrire.*;
 import table.*;
-
 import annotation.*;
+import exceptions.MessageConfirmation;
+import exceptions.MessageErreur;
+import input.Input;
 
 public class Requet {
+
+    /**
+     *
+     * @param colTypye
+     * @param index
+     * @param debut
+     * @return
+     */
     public String donne(String[] colTypye, int index, int debut) {
         String rep = new String();
         for (int j = 0; j < colTypye.length; j++) {
@@ -24,7 +34,10 @@ public class Requet {
         return rep;
     }
     
-    /******************* fonction sur show tables ***************/
+    /******************* fonction sur show tables
+     * @param sql
+     * @return 
+     * @throws java.lang.Exception ***************/
     @NomFunction(nomFunction = "les tables")
     public Table showtable(String sql)throws Exception{
         Table reponse = new Table();
@@ -33,32 +46,42 @@ public class Requet {
         nomcol.add("Nom de table");
         reponse.setNomColumn(nomcol);
         reponse.setData(new Lire().nomtables());
-       return reponse;
+        return reponse;
     }
-    /********************** fonction supprime un table *******/
+    /********************** fonction supprime un table
+     * @param sql
+     * @throws java.lang.Exception *******/
     @NomFunction(nomFunction = "supprime")
-    public void deleteTab(String sql) throws Exception{
+    public void deleteTab(String sql) throws Exception,MessageConfirmation,MessageErreur{
         try {
             String[] sp = sql.split(" ");
             Ecrire ecrire = new Ecrire();
             ecrire.deleteFichier(sp[1]);
-        } catch (Exception e) {
-            System.out.println("requet.Requet.deleteTab() "+e.getMessage());
+        }catch (MessageConfirmation mc) {
+            throw  mc;
+        }catch(MessageErreur me){
+            throw  me;
+        }catch (Exception e) {
             throw  e;
         }
     }
-    /********************** fonction qui supprime touts le table *****/
+    /********************** fonction qui supprime touts le table
+     * @throws java.lang.Exception *****/
     @NomFunction(nomFunction = "supprime all")
-    public void deleteAll()throws Exception{
+    public void deleteAll()throws Exception,MessageErreur{
         try {
             Ecrire ecrire = new Ecrire();
             ecrire.deleteAll();
-        } catch (Exception e) {
+        } catch (MessageErreur me) {
+            throw me;
+        }catch (Exception e) {
             throw e;
         }
     }
     
-    /**********  creation table *******************************/
+    /**********  creation table
+     * @param sql
+     * @throws java.lang.Exception *******************************/
     @NomFunction(nomFunction = "create table")
     public void createtable(String sql) throws Exception {
         String[] requet = sql.split(" ");
@@ -69,14 +92,14 @@ public class Requet {
         try {
             Ecrire ecrire = new Ecrire(requet[2], add);
         } catch (Exception e) {
-           
+            this.getInput().setMessage("Probleme sur la creation d'une table");
             throw new Exception("Probleme sur la creation d'une table");
         }
     }
     
 
     @NomFunction(nomFunction = "insert into")
-    public void insert(String sql) {
+    public void insert(String sql) throws Exception{
         String[] requet = sql.split(" ");
         String[] input = new String[2];
         for (int i = 0; i < requet.length; i++) {
@@ -89,10 +112,17 @@ public class Requet {
         try {
             Ecrire ecrire = new Ecrire(requet[2], input);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            this.getInput().setMessage(e.getMessage());
+            throw  e;
         }
     }
 
+    /**
+     *
+     * @param sql
+     * @return
+     * @throws Exception
+     */
     @NomFunction(nomFunction = "selects *")
     public Table select(String sql) throws Exception {
         try {
@@ -133,12 +163,19 @@ public class Requet {
             }
             return null;
         } catch (Exception e) {
-          
-            throw e;
+            this.getInput().setMessage(e.getMessage());
+            throw  e;
         }
 
     }
 
+    /**
+     *
+     * @param table
+     * @param sql
+     * @return
+     * @throws Exception
+     */
     public Table projection(Table table, String sql) throws Exception {
         String[] inputCols = sql.split(",");
         try {
@@ -166,20 +203,19 @@ public class Requet {
                         }
                     }
                 }
-                if (ValueColumnReponse.size() != 0) {
+                if (!ValueColumnReponse.isEmpty()) {
                     reponseData.add(ValueColumnReponse);
                 }
 
             }
             return new Table(table.getNomTable(), nomColumnReponse, reponseData);
         } catch (Exception e) {
-            e.printStackTrace();
             throw e;
         }
     }
 
     @NomFunction(nomFunction = "select .")
-    public Table projection(String sql) throws Exception {
+    public Table projection(String sql) throws Exception,MessageConfirmation {
         String[] requet = sql.split(" ");
         try {
             Lire lire = new Lire();
@@ -188,15 +224,24 @@ public class Requet {
             ArrayList<String> nomColumnReponse = new ArrayList<>();
             String[] inputCols = requet[2].split(",");
             ArrayList<Integer> idcol = new ArrayList<>();
-
+            
+            int count = 0;
             for (String inputCol : inputCols) {
                 for (int i = 0; i < nomColumns.size(); i++) {
                     if (inputCol.equals(nomColumns.get(i))) {
                         nomColumnReponse.add(nomColumns.get(i));
+                        count++;
                         idcol.add(i);
                     }
                 }
             }
+            
+            // s'il y a une erreur sur le nom de colonne
+            if(count!=inputCols.length){
+                throw  new Exception("Erreur sur le nom de colonne");
+            }
+            
+            
             ArrayList<ArrayList<String>> donne = lire.Data(table);
             ArrayList<ArrayList<String>> reponseData = new ArrayList<>();
             for (int i = 0; i < donne.size(); i++) {
@@ -209,17 +254,25 @@ public class Requet {
                         }
                     }
                 }
-                if (ValueColumnReponse.size() != 0) {
+                if (!ValueColumnReponse.isEmpty()) {
                     reponseData.add(ValueColumnReponse);
                 }
 
             }
             return new Table(table, nomColumnReponse, reponseData);
         } catch (Exception e) {
+            this.getInput().setMessage(e.getMessage());
             throw  e;
         }
     }
 
+    /**
+     *
+     * @param R1
+     * @param R2
+     * @return
+     * @throws Exception
+     */
     public Table produitCartesienne(Table R1, Table R2) throws Exception {
         try {
             ArrayList<String> nomColumnsTable1 = R1.getNomColumn();
@@ -251,11 +304,17 @@ public class Requet {
                     reponseData);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            this.getInput().setMessage(e.getMessage());
+            throw  e;
         }
     }
 
+    /**
+     *
+     * @param Sql
+     * @return
+     * @throws Exception
+     */
     @NomFunction(nomFunction = "select cartesienne")
     public Table produitCartesienne(String Sql) throws Exception {
         String[] requet = Sql.split(" ");
@@ -265,8 +324,8 @@ public class Requet {
             Table table2 = select("select * from " + tables[1]);
             return produitCartesienne(table1, table2);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            this.getInput().setMessage(e.getMessage());
+            throw  e;
         }
     }
 
@@ -341,11 +400,18 @@ public class Requet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            this.getInput().setMessage(e.getMessage());
+            throw  e;
         }
     }
 
+    /**
+     *
+     * @param R1
+     * @param R2
+     * @return
+     * @throws Exception
+     */
     public Table difference(Table R1, Table R2) throws Exception {
         try {
             ArrayList<String> nomColumnsTable1 = R1.getNomColumn();
@@ -380,11 +446,16 @@ public class Requet {
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw e;
         }
     }
 
+    /**
+     *
+     * @param sql
+     * @return
+     * @throws Exception
+     */
     @NomFunction(nomFunction = "select difference")
     public Table difference(String sql) throws Exception {
         String[] requet = sql.split(" ");
@@ -396,11 +467,17 @@ public class Requet {
             Table table2 = select("select * from " + tables[1]);
             return difference(table1, table2);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            this.getInput().setMessage(e.getMessage());
+            throw  e;
         }
     }
 
+    /**
+     *
+     * @param sql
+     * @return
+     * @throws Exception
+     */
     @NomFunction(nomFunction = "select Intersection")
     public Table intersection(String sql) throws Exception {
         String[] requet = sql.split(" ");
@@ -439,12 +516,14 @@ public class Requet {
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            this.getInput().setMessage(e.getMessage());
+            throw  e;
         }
     }
 
-    /****  ****/
+    /**
+     * @param T**
+     * @return   ****/
     public Table supprime(Table T) {
         try {
             ArrayList<ArrayList<String>> donneTable1 = T.getData();
@@ -473,8 +552,8 @@ public class Requet {
             Table T2C = projection(difference(produitCartesienne(S, T1C), table1), requet[16]);
             return supprime(difference(T1C, T2C));
         } catch (Exception e) {
-            // e.printStackTrace();
-            throw e;
+            this.getInput().setMessage(e.getMessage());
+            throw  e;
         }
     }
 
@@ -549,8 +628,18 @@ public class Requet {
             return new Table("Jointure Naturelle table " + tables[0] + " et " + tables[1], nomColumnsReponse,
                     reponseData);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            this.getInput().setMessage(e.getMessage());
+            throw  e;
         }
     }
+    
+    
+    public Input getInput() {
+        return input;
+    }
+
+    public void setInput(Input input) {
+        this.input = input;
+    }
+    Input input ;
 }

@@ -1,5 +1,7 @@
 package ecrire;
 
+import exceptions.MessageConfirmation;
+import exceptions.MessageErreur;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -41,33 +43,32 @@ public class Ecrire {
     }
     
     /**** supprimer un fichier .txt ****/
-    public void deleteFichier(String dir)throws Exception{
+    public void deleteFichier(String dir)throws Exception,MessageConfirmation,MessageErreur{
         String path = "Base\\"+dir+".txt";
         File file = new File(path);
         if (!file.exists()) {
-            throw  new Exception("La table "+dir+" n'existe pas");
+            throw  new MessageErreur("La table "+dir+" n'existe pas");
         }
         if(file.delete()){
-            throw  new Exception("La table "+dir + " est supprimé");
+            throw  new MessageConfirmation("La table "+dir + " est supprimé");
         }else{
-            throw  new Exception("Opération de suppression echouée");
+            throw  new MessageErreur("Opération de suppression echouée");
         }
     }
     
     /**************** supprimer tout le fichier **************/
-    public void deleteAll()throws Exception{
+    public void deleteAll()throws Exception,MessageErreur{
         try {
             File dir = new File("Base\\");
             File[] liste = dir.listFiles();
             for (File item : liste) {
-                System.out.println("les fichier "+ item.isFile() + "  " +item.getName().endsWith(".txt"));
                 if (item.isFile() && item.getName().endsWith(".txt")) {
                    item.delete();
                 } 
             }
             
         } catch (Exception e) {
-            throw  new Exception("il y a une erreur sur deleteAll");
+            throw  new MessageErreur("il y a une erreur sur deleteAll");
         }
     }
 }

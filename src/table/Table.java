@@ -21,18 +21,20 @@ public class Table implements Serializable {
     }
 
     public void afficheResultat() {
-        System.out.println(" \t table " + this.getNomTable());
+        System.out.println(" ");
+        System.out.println(" \t Table " + this.getNomTable());
         System.out.println("");
         ArrayList<String> nomcol = this.getNomColumn();
         for (int i = 0; i < nomcol.size(); i++) {
-            System.out.print(nomcol.get(i) + " \t");
+            System.out.print("  "+nomcol.get(i) + " \t\t");
+            
         }
 
         System.out.println("");
         ArrayList<ArrayList<String>> data = this.getData();
         for (int i = 0; i < data.size(); i++) {
             for (int j = 0; j < data.get(i).size(); j++) {
-                System.out.print(data.get(i).get(j) + " \t");
+                System.out.print(data.get(i).get(j) + " \t\t");
             }
             System.out.println(" ");
         }
