@@ -1,8 +1,7 @@
-idPersonne,Nom,Anniversaire
-int,String,Date
-1,Toavina,23/06/04
-2,Toavina,23/06/04
-3,Hasinjo,23/06/04
-4,Fanyah,06/03/06
-5,Fanyah,06/03/06
-6,Christian,23/06/04
+id,Nom
+int,String
+1,Toavina
+2,Hasinjo
+3,Fanyah
+4,Hendry
+5,Christian

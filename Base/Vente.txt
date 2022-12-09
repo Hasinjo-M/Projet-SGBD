@@ -1,6 +1,0 @@
-id,NomProduit,idPersonne
-int,int
-1,Ordinateur,1
-2,Phone,1
-3,Phone,2
-4,Disque,3

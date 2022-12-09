@@ -1,0 +1,6 @@
+idObject,NomObject
+int,String
+1,Ordinateur
+2,Phone
+3,Cable
+4,Clavier

@@ -50,7 +50,7 @@ public class Ecrire {
             throw  new MessageErreur("La table "+dir+" n'existe pas");
         }
         if(file.delete()){
-            throw  new MessageConfirmation("La table "+dir + " est supprimé");
+            throw  new MessageConfirmation("La table "+ dir + " est supprimé");
         }else{
             throw  new MessageErreur("Opération de suppression echouée");
         }
@@ -63,12 +63,12 @@ public class Ecrire {
             File[] liste = dir.listFiles();
             for (File item : liste) {
                 if (item.isFile() && item.getName().endsWith(".txt")) {
-                   item.delete();
+                    item.delete();
                 } 
             }
             
         } catch (Exception e) {
-            throw  new MessageErreur("il y a une erreur sur deleteAll");
+            throw  new MessageErreur("il y a une erreur sur la suppression de tout les tables");
         }
     }
 }

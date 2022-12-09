@@ -74,10 +74,10 @@ public class Input {
                     && methodUtiliser.getName().equals("deleteTab")) {
                 try {
                     methodUtiliser.invoke(rq, sql);
-                    throw  new MessageConfirmation(" Suppression de la table "+ requet[0] + " terminer");
+                    throw  new MessageConfirmation("ok");
                 }
                 catch (Exception e) {
-                    throw  e;
+                    throw  new MessageConfirmation(this.getMessage());
                 }   
             }// Suppression de tout les tables éxistant
             else if (String.valueOf(methodUtiliser.getReturnType()).equals("void")
@@ -86,7 +86,8 @@ public class Input {
                     methodUtiliser.invoke(rq);
                     throw  new MessageConfirmation(" Suppression de tout les tables  terminer");
                 }  catch (Exception e) {
-                    throw  e;
+                    throw  new MessageConfirmation(e.getMessage());
+                
                 }   
             }
             //Requete qui return un Object Table

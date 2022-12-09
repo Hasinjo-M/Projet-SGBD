@@ -55,11 +55,16 @@ public class Requet {
     public void deleteTab(String sql) throws Exception,MessageConfirmation,MessageErreur{
         try {
             String[] sp = sql.split(" ");
+            System.out.println("requet.Requet.deleteTab()  "+ sql);
             Ecrire ecrire = new Ecrire();
             ecrire.deleteFichier(sp[1]);
         }catch (MessageConfirmation mc) {
+             System.out.println("conf "+mc.getMessage());
+            this.getInput().setMessage(mc.getMessage());
             throw  mc;
         }catch(MessageErreur me){
+            System.out.println("erreur "+me.getMessage());
+            this.getInput().setMessage(me.getMessage());
             throw  me;
         }catch (Exception e) {
             throw  e;
@@ -73,6 +78,7 @@ public class Requet {
             Ecrire ecrire = new Ecrire();
             ecrire.deleteAll();
         } catch (MessageErreur me) {
+            this.getInput().setMessage(me.getMessage());
             throw me;
         }catch (Exception e) {
             throw e;
@@ -140,7 +146,8 @@ public class Requet {
                     }
                 }
                 if (!testcolumn) {
-                    throw new Exception("erreur de nom de column");
+                    this.getInput().setMessage("Erreur sur le nom de colonne");
+                    throw  new Exception("Erreur sur le nom de colonne");
                 }
 
                 ArrayList<ArrayList<String>> donne = lire.Data(table);
@@ -163,7 +170,7 @@ public class Requet {
             }
             return null;
         } catch (Exception e) {
-            this.getInput().setMessage(e.getMessage());
+            this.getInput().setMessage("il y une erreur sur la syntaxe");
             throw  e;
         }
 
@@ -238,6 +245,7 @@ public class Requet {
             
             // s'il y a une erreur sur le nom de colonne
             if(count!=inputCols.length){
+                this.getInput().setMessage("Erreur sur le nom de colonne");
                 throw  new Exception("Erreur sur le nom de colonne");
             }
             
@@ -261,7 +269,7 @@ public class Requet {
             }
             return new Table(table, nomColumnReponse, reponseData);
         } catch (Exception e) {
-            this.getInput().setMessage(e.getMessage());
+            this.getInput().setMessage("il y une erreur sur la syntaxe");
             throw  e;
         }
     }
@@ -304,7 +312,7 @@ public class Requet {
                     reponseData);
 
         } catch (Exception e) {
-            this.getInput().setMessage(e.getMessage());
+            
             throw  e;
         }
     }
@@ -324,7 +332,7 @@ public class Requet {
             Table table2 = select("select * from " + tables[1]);
             return produitCartesienne(table1, table2);
         } catch (Exception e) {
-            this.getInput().setMessage(e.getMessage());
+            this.getInput().setMessage("il y une erreur sur la syntaxe");
             throw  e;
         }
     }
@@ -400,7 +408,7 @@ public class Requet {
                 }
             }
         } catch (Exception e) {
-            this.getInput().setMessage(e.getMessage());
+            this.getInput().setMessage("il y une erreur sur la syntaxe");
             throw  e;
         }
     }
@@ -467,7 +475,7 @@ public class Requet {
             Table table2 = select("select * from " + tables[1]);
             return difference(table1, table2);
         } catch (Exception e) {
-            this.getInput().setMessage(e.getMessage());
+            this.getInput().setMessage("il y une erreur sur la syntaxe");
             throw  e;
         }
     }
@@ -490,7 +498,8 @@ public class Requet {
             ArrayList<String> nomColumnsTable2 = lire.nomColumn(tables[1]);
             ArrayList<String> nomColumnsReponse = new ArrayList<>();
             if (nomColumnsTable1.size() != nomColumnsTable2.size()) {
-                throw new Exception("les deux tables sont incompatible pour l'operation UNION");
+                this.getInput().setMessage("les deux tables sont incompatible pour l'operation intersection");
+                throw new Exception("les deux tables sont incompatible pour l'operation intersection");
             }
             for (String table1 : nomColumnsTable1) {
                 for (String table2 : nomColumnsTable2) {
@@ -500,8 +509,11 @@ public class Requet {
                     }
                 }
             }
-            if (nomColumnsReponse.size() != nomColumnsTable1.size())
+            if (nomColumnsReponse.size() != nomColumnsTable1.size()){
+                this.getInput().setMessage("les deux tables sont incompatible pour l'operation UNION");
                 throw new Exception("les deux tables sont incompatible pour l'operation UNION");
+            }
+                
             else {
                 ArrayList<ArrayList<String>> reponseData = new ArrayList<>();
                 ArrayList<ArrayList<String>> donneTable1 = lire.Data(tables[0]);
@@ -516,7 +528,7 @@ public class Requet {
 
             }
         } catch (Exception e) {
-            this.getInput().setMessage(e.getMessage());
+            this.getInput().setMessage("il y une erreur sur la syntaxe");
             throw  e;
         }
     }
@@ -552,7 +564,7 @@ public class Requet {
             Table T2C = projection(difference(produitCartesienne(S, T1C), table1), requet[16]);
             return supprime(difference(T1C, T2C));
         } catch (Exception e) {
-            this.getInput().setMessage(e.getMessage());
+            this.getInput().setMessage("il y une erreur sur la syntaxe");
             throw  e;
         }
     }
@@ -628,7 +640,7 @@ public class Requet {
             return new Table("Jointure Naturelle table " + tables[0] + " et " + tables[1], nomColumnsReponse,
                     reponseData);
         } catch (Exception e) {
-            this.getInput().setMessage(e.getMessage());
+            this.getInput().setMessage("il y une erreur sur la syntaxe");
             throw  e;
         }
     }

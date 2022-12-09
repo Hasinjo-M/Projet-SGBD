@@ -23,25 +23,27 @@ public class Client {
         Scanner scan = null;
         try {
             scan = new Scanner(System.in);
-            
-        /// Ip du serveur 
+
+            /// Ip du serveur
             System.out.println("Ip du Serveur : ");
             serverName = scan.nextLine();
-        /// Port 
+            /// Port
             System.out.println("Port du Serveur : ");
-            serverPort = Integer.parseInt(scan.nextLine()) ;
-        /// Socket Client (Socket)    
+            serverPort = Integer.parseInt(scan.nextLine());
+            /// Socket Client (Socket)
             socClient = new Socket(serverName, serverPort);
-            //System.out.println(socClient);
-            System.out.println("Vous ^etes connecté sur le serveur :"+ socClient.getLocalAddress() + " Port : "+ socClient.getPort());
+
+            System.out.println("Vous ^etes connecté sur le serveur :" + socClient.getLocalAddress() + " Port : "
+                    + socClient.getPort());
 
             out = new OutputStreamWriter(socClient.getOutputStream());
 
             ObjectInput = new ObjectInputStream(socClient.getInputStream());
 
             userOutput = new BufferedWriter(out);
-           
+
             boolean testMessage = false;
+
             while (true) {
                 System.out.print("Sql>");
                 String requet = scan.nextLine();
@@ -52,17 +54,17 @@ public class Client {
                     System.out.println("Deconnecté");
                     break;
                 }
-               
+
                 try {
                     Object objrecu = ObjectInput.readObject();
-                    if(objrecu instanceof Table table){
-                        table.afficheResultat();
-                    }else {
+                    if (objrecu instanceof Table table) {
+                        table.Affichage();
+                    } else {
                         String message = String.valueOf(objrecu);
                         System.out.println(message);
-                    }      
+                    }
                 } catch (Exception k) {
-                    System.out.println("Erreur : "+k.getMessage());
+                    System.out.println("Erreur : " + k.getMessage());
                 }
             }
 
@@ -77,7 +79,7 @@ public class Client {
                 out.close();
             if (ObjectInput != null)
                 ObjectInput.close();
-           
-        }       
+
+        }
     }
 }
