@@ -59,7 +59,6 @@ public class Requet {
             Ecrire ecrire = new Ecrire();
             ecrire.deleteFichier(sp[1]);
         }catch (MessageConfirmation mc) {
-             System.out.println("conf "+mc.getMessage());
             this.getInput().setMessage(mc.getMessage());
             throw  mc;
         }catch(MessageErreur me){

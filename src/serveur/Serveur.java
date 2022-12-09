@@ -23,7 +23,7 @@ public class Serveur extends Thread{
             System.out.println("Serveur :" + server.getLocalSocketAddress());
             while(true){
                 Socket client = server.accept();
-                System.out.println("Client : "+client.getInetAddress() + " connecté ");
+                System.out.println("Client : "+client.getLocalSocketAddress() + " connecté ");
                 new TraitementRequet(client).start();
                 
             }
