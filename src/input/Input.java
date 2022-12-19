@@ -96,6 +96,7 @@ public class Input {
                    Table reponse = (Table) methodUtiliser.invoke(rq, sql);
                    return reponse;
                 } catch (Exception e) {
+                    System.err.println(this.getMessage());
                    throw new Exception(this.getMessage());
                 }
             }

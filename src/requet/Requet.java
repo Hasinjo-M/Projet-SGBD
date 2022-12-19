@@ -62,7 +62,6 @@ public class Requet {
             this.getInput().setMessage(mc.getMessage());
             throw  mc;
         }catch(MessageErreur me){
-            System.out.println("erreur "+me.getMessage());
             this.getInput().setMessage(me.getMessage());
             throw  me;
         }catch (Exception e) {
@@ -169,7 +168,7 @@ public class Requet {
             }
             return null;
         } catch (Exception e) {
-            this.getInput().setMessage("il y une erreur sur la syntaxe");
+            this.getInput().setMessage(e.getMessage());
             throw  e;
         }
 
@@ -244,7 +243,7 @@ public class Requet {
             
             // s'il y a une erreur sur le nom de colonne
             if(count!=inputCols.length){
-                this.getInput().setMessage("Erreur sur le nom de colonne");
+               this.getInput().setMessage("Erreur sur le nom de colonne");
                 throw  new Exception("Erreur sur le nom de colonne");
             }
             
@@ -268,7 +267,7 @@ public class Requet {
             }
             return new Table(table, nomColumnReponse, reponseData);
         } catch (Exception e) {
-            this.getInput().setMessage("il y une erreur sur la syntaxe");
+           this.getInput().setMessage(e.getMessage());
             throw  e;
         }
     }
@@ -331,7 +330,7 @@ public class Requet {
             Table table2 = select("select * from " + tables[1]);
             return produitCartesienne(table1, table2);
         } catch (Exception e) {
-            this.getInput().setMessage("il y une erreur sur la syntaxe");
+            this.getInput().setMessage(e.getMessage());
             throw  e;
         }
     }
@@ -387,8 +386,10 @@ public class Requet {
                         }
                     }
                 }
-                if (nomColumnsReponse.size() != nomColumnsTable1.size())
+                if (nomColumnsReponse.size() != nomColumnsTable1.size()){
+                    this.getInput().setMessage("les deux tables sont incompatibes");
                     throw new Exception("les deux tables sont incompatible pour l'operation UNION");
+                }
                 else {
                     ArrayList<ArrayList<String>> reponseData = new ArrayList<>();
                     ArrayList<ArrayList<String>> donneTable1 = lire.Data(tables[0]);
@@ -407,7 +408,7 @@ public class Requet {
                 }
             }
         } catch (Exception e) {
-            this.getInput().setMessage("il y une erreur sur la syntaxe");
+            this.getInput().setMessage(e.getMessage());
             throw  e;
         }
     }
@@ -435,8 +436,12 @@ public class Requet {
                     }
                 }
             }
-            if (nomColumnsReponse.size() != nomColumnsTable1.size())
-                throw new Exception("les deux tables sont incompatible pour l'operation UNION");
+            if (nomColumnsReponse.size() != nomColumnsTable1.size()){
+                this.getInput().setMessage("les deux tables sont incompatibles");
+                throw new Exception("les deux tables sont incompatibles");
+                
+            }
+                
             else {
                 ArrayList<ArrayList<String>> reponseData = new ArrayList<>();
                 ArrayList<ArrayList<String>> donneTable1 = R1.getData();
@@ -474,7 +479,7 @@ public class Requet {
             Table table2 = select("select * from " + tables[1]);
             return difference(table1, table2);
         } catch (Exception e) {
-            this.getInput().setMessage("il y une erreur sur la syntaxe");
+            this.getInput().setMessage(e.getMessage());
             throw  e;
         }
     }
@@ -527,7 +532,7 @@ public class Requet {
 
             }
         } catch (Exception e) {
-            this.getInput().setMessage("il y une erreur sur la syntaxe");
+            this.getInput().setMessage(e.getMessage());
             throw  e;
         }
     }
@@ -555,7 +560,6 @@ public class Requet {
     @NomFunction(nomFunction = "select division")
     public Table division(String sql) throws Exception {
         String[] requet = sql.split(" ");
-        int i = 0;
         try {
             Table table1 = projection("select . " + requet[4] + " from " + requet[6]);
             Table S = projection("select . " + requet[11] + " from " + requet[13]);
@@ -563,7 +567,7 @@ public class Requet {
             Table T2C = projection(difference(produitCartesienne(S, T1C), table1), requet[16]);
             return supprime(difference(T1C, T2C));
         } catch (Exception e) {
-            this.getInput().setMessage("il y une erreur sur la syntaxe");
+            this.getInput().setMessage(e.getMessage());
             throw  e;
         }
     }
@@ -639,7 +643,7 @@ public class Requet {
             return new Table("Jointure Naturelle table " + tables[0] + " et " + tables[1], nomColumnsReponse,
                     reponseData);
         } catch (Exception e) {
-            this.getInput().setMessage("il y une erreur sur la syntaxe");
+            this.getInput().setMessage(e.getMessage());
             throw  e;
         }
     }
